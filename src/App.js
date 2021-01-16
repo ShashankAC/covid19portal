@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import styles from './App.module.css';
+import Header from '../src/components/Header/Header'
+import CountBox from './components/CountBox/CountBox'
+import Navbar from './components/Navbar/Navbar'
+import MainContent from './containers/MainContent/MainContent'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={styles.App}>
+      <Header className={styles.AppHeader}/>
+      <div className={styles.mainContent}>
+        <Navbar />
+        <MainContent />
+      </div>
+      
+      {/* <CountBox title="States" fontWeight="bold" value="25"/> */}
     </div>
   );
 }
