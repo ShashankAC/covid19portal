@@ -6,7 +6,7 @@ import updateStates from '../../Store/actions/statesAction'
 function Navbar(props) {
 
     const [statesList, setStatesList] = useState([])
-    const [selectAll, setSelectAll] = useState(true)
+    // const [selectAll, setSelectAll] = useState(true)
 
     useEffect(() => {
         setStatesList(props.states.states)
@@ -19,16 +19,16 @@ function Navbar(props) {
         let states = [...statesList]
 
         if (state === "selectAll" && checked) {
-            setSelectAll(true)
-            for (let i = 0; i < states.length; i++) {
-                states[i].isChecked = true
-            }
+            // setSelectAll(true)
+            // for (let i = 0; i < states.length; i++) {
+            //     states[i].isChecked = true
+            // }
         }
         else if(state === "selectAll" && !checked) {
-            setSelectAll(false)
-            for (let i = 0; i < states.length; i++) {
-                states[i].isChecked = false
-            }
+            // setSelectAll(false)
+            // for (let i = 0; i < states.length; i++) {
+            //     states[i].isChecked = false
+            // }
         }
         else {
             for (let i = 0; i < states.length; i++) {
@@ -42,7 +42,6 @@ function Navbar(props) {
         }
         setStatesList(states)
         props.onUpdateStates({states: states})
-        // console.log(states)
     }
     
     return (

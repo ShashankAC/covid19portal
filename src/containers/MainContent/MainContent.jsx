@@ -3,15 +3,14 @@ import { connect } from 'react-redux'
 import styles from './MainContent.module.css'
 import CountBox from '../../components/CountBox/CountBox'
 import axios from 'axios'
+import BarChart from '../../components/BarChart/BarChart'
 
 function MainContent(props) {
 
     const [statesCount, setStatesCount] = useState([])
-    const [date, setDate] = useState('')
     const [tested, setTested] = useState(0)
     const [confirmed, setConfirmed] = useState(0)
     const [recovered, setRecovered] = useState(0)
-
 
     useEffect(() => {
         let selectedStateCount = 0
@@ -20,7 +19,6 @@ function MainContent(props) {
                 selectedStateCount++
             }
         }
-        setDate(props.date.latestDate)
         setStatesCount(selectedStateCount)
         axios.get('https://api.covid19india.org/v4/timeseries.json')
         .then(response => {
@@ -39,9 +37,15 @@ function MainContent(props) {
                             Object.keys(data[stateSelected]).forEach((value) => {
                                 let dateSelected = value
                                 if(data[stateSelected][dateSelected][props.date.latestDate]) {
-                                    confirmedC += +data[stateSelected][dateSelected][props.date.latestDate]['total']['confirmed']
-                                    testedC += +data[stateSelected][dateSelected][props.date.latestDate]['total']['tested']
-                                    recoveredC += +data[stateSelected][dateSelected][props.date.latestDate]['total']['recovered']
+                                    if(data[stateSelected][dateSelected][props.date.latestDate]['total']['confirmed']) {
+                                        confirmedC += +data[stateSelected][dateSelected][props.date.latestDate]['total']['confirmed']
+                                    }
+                                    if(data[stateSelected][dateSelected][props.date.latestDate]['total']['tested']) {
+                                        testedC += +data[stateSelected][dateSelected][props.date.latestDate]['total']['tested']
+                                    }
+                                    if(data[stateSelected][dateSelected][props.date.latestDate]['total']['recovered']) {
+                                        recoveredC += +data[stateSelected][dateSelected][props.date.latestDate]['total']['recovered']
+                                    }
                                 }
                             })
                         }
@@ -65,7 +69,10 @@ function MainContent(props) {
                 <CountBox title="Tested" value={tested} fontWeight="bold" />
                 <CountBox title="Confirmed" value={confirmed} fontWeight="bold" />        
                 <CountBox title="Recovered" value={recovered} fontWeight="bold" />  
-            </div>       
+            </div>     
+            <div className={styles.charts}>
+                <BarChart />
+            </div>  
         </div>
     )
 }
