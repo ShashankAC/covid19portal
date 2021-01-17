@@ -107,10 +107,15 @@ function BarChart(props) {
                                             let selectedDistrict = value
                                             Object.keys(data[stateSelected][selectedDistrict]).forEach((value, i) => {
                                                 let districtName = value
-                                                Object.keys(data[stateSelected][selectedDistrict][districtName]).forEach((value) => {
-                                                    let total = data[stateSelected][selectedDistrict][districtName]['total']
+                                                // Object.keys(data[stateSelected][selectedDistrict][districtName]).forEach((value) => {
+                                                let total = data[stateSelected][selectedDistrict][districtName]['total']
+                                                if(total['confirmed']) {
                                                     numbers.push(total['confirmed'])
-                                                })
+                                                }
+                                                else {
+                                                    numbers.push(0)
+                                                }
+                                                // })
                                             })
                                         }
                                     })
@@ -130,7 +135,7 @@ function BarChart(props) {
                             type: 'bar'
                         },
                         title: {
-                            text: 'DISTRICT WISE STATE GROUPED'
+                            text: 'DISTRICT WISE STATE GROUPED (Confirmed)'
                         },
                         subtitle: {
                             text: 'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>'
@@ -176,21 +181,22 @@ function BarChart(props) {
                         credits: {
                             enabled: false
                         },
-                        series: [
-                            {
-                                name: 'State 1',
-                                data: [107, 31, 635, 203, 2]
-                            }, {
-                                name: 'State 2',
-                                data: [133, 156, 947, 408, 6]
-                            }, {
-                                name: 'State 3',
-                                data: [814, 841, 3714, 727, 31]
-                            }, {
-                                name: 'State 4',
-                                data: [1216, 1001, 4436, 738, 40]
-                            }
-                        ]
+                        series: statesList
+                        // [
+                        //     {
+                        //         name: 'State 1',
+                        //         data: [107, 31, 635, 203, 2]
+                        //     }, {
+                        //         name: 'State 2',
+                        //         data: [133, 156, 947, 408, 6]
+                        //     }, {
+                        //         name: 'State 3',
+                        //         data: [814, 841, 3714, 727, 31]
+                        //     }, {
+                        //         name: 'State 4',
+                        //         data: [1216, 1001, 4436, 738, 40]
+                        //     }
+                        // ]
                     })  
                 })
                 .catch(error => {
