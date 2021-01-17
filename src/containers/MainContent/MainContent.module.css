@@ -1,4 +1,8 @@
 .mainContent {
-    display: grid;
-    
+    display: flex;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-evenly;
 }

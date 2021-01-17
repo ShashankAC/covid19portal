@@ -1,44 +1,84 @@
 import React, { useState, useEffect } from 'react'
 import styles from './Navbar.module.css'
+import { connect } from 'react-redux'
+import updateStates from '../../Store/actions/statesAction'
 
-function Navbar() {
+function Navbar(props) {
 
-    const [selectedStates, setSelectedStates] = useState([])
     const [statesList, setStatesList] = useState([])
-    
-    
+    const [selectAll, setSelectAll] = useState(true)
+
     useEffect(() => {
-        setStatesList(["MH", "KA", "AP", "TN", "KL", "DL", "UP", "WB", "OR", "RJ",
-        "TG", "CT", "HR", "BR", "GJ", "MP", "AS", "PB", "JK", "JH", "UT", "HP", "GA",
-        "PY","TR","MN","CH","AR","ML","NL","LA","SK","AN","MZ","DN","UN","LD"])
-    }, [])
+        setStatesList(props.states.states)
+        // console.log(props.states.states)
+    }, [props.states])
 
     const handleChange = (event) => {
-        let states = [...selectedStates]
-        if(event.target.checked) {
-            states.push(event.target.value)
-            setSelectedStates(states)
+        let state = event.target.name
+        let checked = event.target.checked
+        let states = [...statesList]
+
+        if (state === "selectAll" && checked) {
+            setSelectAll(true)
+            for (let i = 0; i < states.length; i++) {
+                states[i].isChecked = true
+            }
+        }
+        else if(state === "selectAll" && !checked) {
+            setSelectAll(false)
+            for (let i = 0; i < states.length; i++) {
+                states[i].isChecked = false
+            }
         }
         else {
-            let newList = []
-            for (let i = 0; i < selectedStates.length; i++) {
-                if(event.target.value !== selectedStates[i]) {
-                    newList.push(selectedStates[i])
+            for (let i = 0; i < states.length; i++) {
+                if(states[i].name === state && checked) {
+                    states[i].isChecked = true
+                }
+                else if(states[i].name === state && !checked) {
+                    states[i].isChecked = false
                 }
             }
-            states = newList
-            setSelectedStates(states)
         }
-        console.log(states)
+        setStatesList(states)
+        props.onUpdateStates({states: states})
+        // console.log(states)
     }
     
     return (
         <div className={styles.container}>
+            {/* <div className={styles.states}>
+                <label className={styles.selectAll}>Select All</label>
+                    <input 
+                        type="checkbox"
+                        name="selectAll"
+                        value={selectAll}
+                        checked={selectAll}
+                        onChange={handleChange}
+                    />
+            </div> */}
             {statesList.map((state, i) => (
-                <input key={i} type="checkbox" value={state} name={state} onChange={handleChange}/>
+                <div key={i} className={styles.states}>
+                    <label className={styles.statesName}>{state.name}</label>
+                    <input  
+                        type="checkbox" 
+                        value={state.name}
+                        checked={state.isChecked} 
+                        name={state.name}
+                        className={styles.stateCheckBox}
+                        onChange={handleChange}/>
+                </div>
             ))}
         </div>
     )
 }
 
-export default Navbar
+const mapStateToProps = state => ({
+    states: state.states
+})
+
+const mapDispatchToProps = {
+    onUpdateStates: updateStates
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar)
